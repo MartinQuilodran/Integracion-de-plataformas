@@ -1,0 +1,200 @@
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #ACB2BA;
+    display: grid;
+    min-height: 100vh;
+    grid-template-rows: auto 1fr auto;
+}
+.corgifotito {
+    height: 100px;
+    align-items: center;
+}
+
+.navbar{
+    background-color: #ACB2BA !important;
+}
+
+.footerclass{
+    background-color: #ACB2BA !important;
+}
+
+.iniciosesion {
+    height: 55px;
+    
+}
+
+.carrocompras {
+    height: 42px;
+    margin: 20px;
+}
+
+ul {
+
+    align-items: center;
+}
+
+.textofooter {
+    color: black;
+}
+
+.corgistorelink {
+    text-decoration: none;
+}
+
+.containercard {
+    width: 98%;
+}
+
+.tituloproductos {
+    text-align: center;
+    font-size: 25px;
+    color: black;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 300px;
+    white-space: nowrap;
+}
+
+
+
+.textocentro{
+    margin-bottom: 10px;
+    margin-top: 40px;
+    font-weight: bold;
+
+}
+
+
+.card {
+    transition: all 0.3s ease;
+    background-color: #d4d4d4 !important;
+    cursor: pointer;
+}
+
+.card:hover {
+    box-shadow: 0 0.1rem 0.4rem rgba(0,0,0,0.3);
+}   
+
+
+.containerProductos {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    transition: all .5s;
+}
+
+
+hr {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.Subtitulos {
+    font-weight: bold;
+
+}
+
+.Editar_productos{
+    margin: 35px; 
+}
+
+body {
+    background-color: #f3f2f2;
+    color: #333;
+  }
+  
+h1 {
+color: #555;
+}
+  
+button {
+background-color: #333;
+color: #fff;
+}
+
+.descuento{
+    align-items: center;
+}
+
+.cardRegistro {
+    transition: all 0.3s ease;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+
+.cardRegistro:hover {
+    box-shadow: 0 0.1rem 0.4rem rgba(0,0,0,0.3);
+}
+
+.error{
+    color: red;
+}
+
+.footerteto{
+    background-color: #ACB2BA;
+    margin-top: 20px;
+}
+
+.precioDestacado{
+    color: red;
+    font-weight: bold;
+    font-size: large;
+}
+
+.container-items{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.item{
+    border-radius: 10px;
+}
+
+.item:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+}
+
+.item img{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    transition: all .5s;
+}
+
+.item figure{
+    overflow: hidden;
+}
+
+.item:hover img{
+    transform: scale(1.2);
+}
+
+.info-product{
+    padding: 15px 30px;
+    line-height: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.price{
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.info-product button{
+    border: none;
+    background: none;
+    background-color: #000;
+    color: #fff;
+    padding: 15px 10px;
+    cursor: pointer;
+}

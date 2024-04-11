@@ -1,0 +1,133 @@
+{% extends "./base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" id="style">
+{% endblock %}
+
+{% block body %}
+<div id="carouselExampleIndicators" class="carousel slide">
+  <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="fotos carousel-item active">
+      <img src="{% static 'img/10001_1.png' %}" class="d-block w-100"  alt="">
+    </div>
+    <div class="fotos carousel-item">
+      <img src="{% static 'img/2002.png' %}" class="d-block w-100" alt="...">
+    </div>
+    <div class="fotos carousel-item">
+      <img src="{% static 'img/3002.png' %}" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<div>
+  <h2 class="textocentro text-center">Algunos de nuestros productos</h2>
+</div>
+
+<div class="container">
+  <div class="row mt-5">
+    <h1>Teclados</h1>
+    {% for p in cate_teclados %}
+    <div class="col-md-3 mt-3">
+        <div class="card d-flex flex-column h-100" style="width: 19.2rem;">
+            <img src="{{p.imagen_url.url}}" class="card-img-top" alt="..." style="width: 19rem; height: 350px;">
+            <div class="card-body">
+              <h5 class="card-title">{{p.nombre}}</h5>
+              <p class="card-text">{{p.descripcion}}</p>
+              <p class="precioDestacado card-text">${{p.precio|floatformat:0|intcomma}}</p>
+              <div class="mt-auto">
+                {% if not request.user.is_authenticated %}
+                  <button class="btn btn-primary liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+                {% else %}
+                  {% if p.stock > 0 %}
+                    <form method="POST" action="{% url 'agregar_al_carrito' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="sku" value="{{p.sku}}">
+                      <input type="submit" class="btn btn-primary" value="Agregar al carrito">
+                    </form>
+                  {% else %}
+                    <p class="card-text">Agotado</p>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row mt-5">
+  <h1>Switches</h1>
+  {% for p in cate_switches %}
+  <div class="col-md-3 mt-3">
+      <div class="card d-flex flex-column h-100" style="width: 19.2rem;">
+          <img src="{{p.imagen_url.url}}" class="card-img-top" alt="..." style="width: 19rem; height: 350px;">
+          <div class="card-body">
+            <h5 class="card-title">{{p.nombre}}</h5>
+            <p class="card-text">{{p.descripcion}}</p>
+            <p class="precioDestacado card-text">${{p.precio|floatformat:0|intcomma}}</p>
+            <div class="mt-auto">
+              {% if not request.user.is_authenticated %}
+                <button class="btn btn-primary liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+              {% else %}
+                {% if p.stock > 0 %}
+                  <form method="POST" action="{% url 'agregar_al_carrito' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="sku" value="{{p.sku}}">
+                    <input type="submit" class="btn btn-primary" value="Agregar al carrito">
+                  </form>
+                {% else %}
+                  <p class="card-text">Agotado</p>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
+</div>
+  </div>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Debes iniciar sesión primero</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Por favor, inicia sesión para agregar productos al carrito.
+    </div>
+  </div>
+</div>
+
+</body>
+{% endblock %}
+
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js" integrity="sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i" crossorigin="anonymous"></script>
+<script>
+  var stylewhite = "{% static 'css/styles.css' %}";
+  var styledark = "{% static 'css/stylesdark.css' %}";
+</script>
+<script src="{% static 'js/toast.js' %}"></script>
+<script src="{% static 'js/reloj.js' %}"></script>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

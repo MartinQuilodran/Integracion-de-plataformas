@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">    
+    {% block head %}
+  
+    {% endblock %}
+    <title>Quantium</title>
+</head>
+<body>
+  
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+         
+    <div class="container-fluid">
+        <a href="/">
+          <img src="{% static 'img/corgi.png' %}" class="corgifotito">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span> 
+        </button> 
+        <a class="navbar-brand texto" href="/">Quantium</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/teclados">Teclados</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/switches">Switches</a>
+                </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'img/InicioSesion.png' %}" class="iniciosesion">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if user.is_authenticated %}
+                    <a class="dropdown-item">{{user.username}}</a>
+                {% else %}  
+                    <a class="dropdown-item" href="{% url 'login' %}">Ingresar</a>
+                {% endif %}
+              <a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a>
+            </div>
+          </li>
+          <a class="" href="/carrocompras">
+            <img src="{% static 'img/carrocompras.png' %}" class="carrocompras">
+          </a>
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search">
+          <button class="btn btn-dark" type="submit">Buscar</button>
+        </form>
+      </div>
+    </div>
+   </nav>
+      {% block body %}
+
+      {% endblock %}
+    <footer class="footerteto text-center text-white">
+      <div class="container p-4 pb-0">
+        <section class="textofooter">
+          <p class="d-flex justify-content-center">
+            {% if request.user.is_superuser %}
+              <a type="button" class="btn btn-dark btn-rounded background-color: black" href="/agregarProducto"> Agregar Producto</a>
+            {% endif %}
+          </p>
+        </section>
+      </div>
+      <div class="text-center p-3 textofooter">
+        © 2023 Copyright: QuantiumIndustries
+        <a class="text-black corgistorelink"></a>
+      </div>
+      {% block footer %}
+
+      {% endblock %}
+    </footer>
+    
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script>
+      var stylewhite = "{% static 'css/styles.css' %}";
+      var styledark = "{% static 'css/stylesdark.css' %}";
+    </script>
+    <script src="{% static 'js/toggledarkmode.js' %}"></script>
+    {% block script %}
+    
+    {% endblock %}
+    
+
+</body>
+</html>
