@@ -38,69 +38,65 @@
   <h2 class="textocentro text-center">Algunos de nuestros productos</h2>
 </div>
 
-<div class="container">
-  <div class="row mt-5">
-    <h1>Teclados</h1>
-    {% for p in cate_teclados %}
-    <div class="col-md-3 mt-3">
-        <div class="card d-flex flex-column h-100" style="width: 19.2rem;">
-            <img src="{{p.imagen_url.url}}" class="card-img-top" alt="..." style="width: 19rem; height: 350px;">
-            <div class="card-body">
-              <h5 class="card-title">{{p.nombre}}</h5>
-              <p class="card-text">{{p.descripcion}}</p>
-              <p class="precioDestacado card-text">${{p.precio|floatformat:0|intcomma}}</p>
-              <div class="mt-auto">
-                {% if not request.user.is_authenticated %}
-                  <button class="btn btn-primary liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
-                {% else %}
-                  {% if p.stock > 0 %}
-                    <form method="POST" action="{% url 'agregar_al_carrito' %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="sku" value="{{p.sku}}">
-                      <input type="submit" class="btn btn-primary" value="Agregar al carrito">
-                    </form>
-                  {% else %}
-                    <p class="card-text">Agotado</p>
-                  {% endif %}
-                {% endif %}
-              </div>
-            </div>
-        </div>
+<div class="container-items">
+  {% for p in cate_teclados %}
+  <div class="item">
+    <figure>
+      <img
+        src="{{ p.imagen_url.url }}"
+        alt="{{ p.nombre }}"
+      />
+    </figure>
+    <div class="info-product">
+      <h2>{{ p.nombre }}</h2>
+      <p class="price">${{ p.precio|floatformat:0|intcomma }}</p>
+      {% if not request.user.is_authenticated %}
+        <button class="btn btn-primary liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+      {% else %}
+        {% if p.stock > 0 %}
+          <form method="POST" action="{% url 'agregar_al_carrito' %}">
+            {% csrf_token %}
+            <input type="hidden" name="sku" value="{{ p.sku }}">
+            <button type="submit" class="btn btn-primary liveToastBtn" data-bs-toggle="toast" data-bs-target="#liveToast">Añadir al carrito</button>
+          </form>
+        {% else %}
+        <p class="card-text">Agotado</p>
+        {% endif %}
+      {% endif %}
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
 </div>
-<div class="row mt-5">
-  <h1>Switches</h1>
+<div class="container-items">
   {% for p in cate_switches %}
-  <div class="col-md-3 mt-3">
-      <div class="card d-flex flex-column h-100" style="width: 19.2rem;">
-          <img src="{{p.imagen_url.url}}" class="card-img-top" alt="..." style="width: 19rem; height: 350px;">
-          <div class="card-body">
-            <h5 class="card-title">{{p.nombre}}</h5>
-            <p class="card-text">{{p.descripcion}}</p>
-            <p class="precioDestacado card-text">${{p.precio|floatformat:0|intcomma}}</p>
-            <div class="mt-auto">
-              {% if not request.user.is_authenticated %}
-                <button class="btn btn-primary liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
-              {% else %}
-                {% if p.stock > 0 %}
-                  <form method="POST" action="{% url 'agregar_al_carrito' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="sku" value="{{p.sku}}">
-                    <input type="submit" class="btn btn-primary" value="Agregar al carrito">
-                  </form>
-                {% else %}
-                  <p class="card-text">Agotado</p>
-                {% endif %}
-              {% endif %}
-            </div>
-          </div>
-      </div>
+  <div class="item">
+    <figure>
+      <img
+        src="{{ p.imagen_url.url }}"
+        alt="{{ p.nombre }}"
+      />
+    </figure>
+    <div class="info-product">
+      <h2>{{ p.nombre }}</h2>
+      <p class="price">${{ p.precio|floatformat:0|intcomma }}</p>
+      {% if not request.user.is_authenticated %}
+        <button class="btn btn-primary liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+      {% else %}
+        {% if p.stock > 0 %}
+          <form method="POST" action="{% url 'agregar_al_carrito' %}">
+            {% csrf_token %}
+            <input type="hidden" name="sku" value="{{ p.sku }}">
+            <button type="submit" class="btn btn-primary liveToastBtn" data-bs-toggle="toast" data-bs-target="#liveToast">Añadir al carrito</button>
+          </form>
+        {% else %}
+        <p class="card-text">Agotado</p>
+        {% endif %}
+      {% endif %}
+    </div>
   </div>
   {% endfor %}
 </div>
   </div>
-
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
