@@ -11,37 +11,38 @@
 {% block body %}
 
 <title>Teclados</title>
-<h2 class="Subtitulos text-center pt-3">Teclados</h2>
+<h2 class="Subtitulos text-center pt-3">TECLADOS</h2>
 <hr>
-<div class="container-items">
-  {% for p in cate_teclados %}
-  <div class="item">
-    <figure>
-      <img
-        src="{{ p.imagen_url.url }}"
-        alt="{{ p.nombre }}"
-      />
-    </figure>
-    <div class="info-product">
-      <h2>{{ p.nombre }}</h2>
-      <p class="price">${{ p.precio|floatformat:0|intcomma }}</p>
-      {% if not request.user.is_authenticated %}
-        <button class="btn btn-primary liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
-      {% else %}
-        {% if p.stock > 0 %}
-          <form method="POST" action="{% url 'agregar_al_carrito' %}">
-            {% csrf_token %}
-            <input type="hidden" name="sku" value="{{ p.sku }}">
-            <button type="submit" class="btn btn-primary liveToastBtn" data-bs-toggle="toast" data-bs-target="#liveToast">Añadir al carrito</button>
-          </form>
-        {% else %}
-        <p class="card-text">Agotado</p>
-        {% endif %}
-      {% endif %}
-    </div>
+
+<div class="container mt-5">
+  <div class="row">
+    {% for teclado in cate_teclados %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-4">
+        <div class="card h-100">
+          <img src="{{ teclado.imagen_url.url }}" class="card-img-top" alt="{{ teclado.nombre }}">
+          <div class="card-body">
+            <h5 class="card-title"><b>{{ teclado.nombre }}</b></h5>
+            <p class="card-text price">${{ teclado.precio|floatformat:0|intcomma }}</p>
+            {% if not request.user.is_authenticated %}
+              <button class="btn btn-dark liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+            {% else %}
+              {% if teclado.stock > 0 %}
+                <form method="POST" action="{% url 'agregar_al_carrito' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="sku" value="{{ teclado.sku }}">
+                  <button type="submit" class="btn btn-primary liveToastBtn" data-bs-toggle="toast" data-bs-target="#liveToast">Añadir al carrito</button>
+                </form>
+              {% else %}
+                <p class="card-text">Agotado</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
+
 
 
 
@@ -56,7 +57,7 @@
     </div>
   </div>
 </div>
-
+<hr>
 {% endblock %}
 
 {% block script %}

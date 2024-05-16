@@ -2,24 +2,31 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.poetsen-one-regular {
+    font-family: "Poetsen One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
 body {
     margin: 0;
-    background-color: #ACB2BA;
+    background-color: #ffffff;
     display: grid;
     min-height: 100vh;
     grid-template-rows: auto 1fr auto;
+    font-family: Poetsen system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 .corgifotito {
     height: 100px;
     align-items: center;
 }
-
-.navbar{
-    background-color: #ACB2BA !important;
+.navbar {
+    background-color: #ffffff !important;
 }
 
+
 .footerclass{
-    background-color: #ACB2BA !important;
+    background-color: #0871f9;
 }
 
 .iniciosesion {
@@ -65,19 +72,24 @@ ul {
     margin-bottom: 10px;
     margin-top: 40px;
     font-weight: bold;
-
 }
 
 
 .card {
     transition: all 0.3s ease;
-    background-color: #d4d4d4 !important;
+    background-color: #ffffff00 !important;
     cursor: pointer;
+    border: none;
+    overflow: hidden;
 }
 
-.card:hover {
-    box-shadow: 0 0.1rem 0.4rem rgba(0,0,0,0.3);
-}   
+.card-img-top {
+    transition: transform 0.3s; /* Agrega una transición suave */
+}
+
+.card:hover{
+    transform: scale(1.1); /* Ajusta el valor para el nivel de zoom */
+}
 
 
 .containerProductos {
@@ -102,16 +114,11 @@ hr {
 .Editar_productos{
     margin: 35px; 
 }
-
-body {
-    background-color: #f3f2f2;
-    color: #333;
-  }
   
-h1 {
+h1{
 color: #555;
 }
-  
+
 button {
 background-color: #333;
 color: #fff;
@@ -137,7 +144,7 @@ color: #fff;
 }
 
 .footerteto{
-    background-color: #ACB2BA;
+    background-color: #f7f7f7;
     margin-top: 20px;
 }
 
@@ -165,7 +172,6 @@ color: #fff;
     width: 100%;
     height: 300px;
     object-fit: cover;
-    border-radius: 10px 10px 0 0;
     transition: all .5s;
 }
 
@@ -177,13 +183,6 @@ color: #fff;
     transform: scale(1.2);
 }
 
-.info-product{
-    padding: 15px 30px;
-    line-height: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
 
 .price{
     font-size: 18px;
@@ -198,3 +197,25 @@ color: #fff;
     padding: 15px 10px;
     cursor: pointer;
 }
+
+
+.textoIni{
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #000;
+    text-align: justify;
+}
+
+.card-text{
+    color:#aeaeae   
+}
+
+.navbar{
+    background-color: #783636; /* Tu color personalizado */
+}
+
+.card-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+  }
