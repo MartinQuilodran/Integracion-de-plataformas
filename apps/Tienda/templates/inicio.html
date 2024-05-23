@@ -44,18 +44,19 @@
           <div class="card-body">
             <h5 class="card-title"><b>{{ p.nombre }}</b></h5>
             <p class="card-text price">${{ p.precio|floatformat:0|intcomma }}</p>
-            {% if not request.user.is_authenticated %}
-              <button class="btn btn-dark liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
-            {% else %}
-              {% if p.stock > 0 %}
+            
+            {% if p.stock > 0 %}
+              {% if not request.user.is_authenticated %}
+                <button class="btn btn-dark liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+              {% else %}
                 <form method="POST" action="{% url 'agregar_al_carrito' %}">
                   {% csrf_token %}
                   <input type="hidden" name="sku" value="{{ p.sku }}">
                   <button type="submit" class="btn btn-primary liveToastBtn" data-bs-toggle="toast" data-bs-target="#liveToast">Añadir al carrito</button>
                 </form>
-              {% else %}
-                <p class="card-text">Agotado</p>
               {% endif %}
+            {% else %}
+              <p class="card-text">Agotado</p>
             {% endif %}
           </div>
         </div>

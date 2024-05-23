@@ -8,52 +8,47 @@
 {% block body %}
 
 <div class="container">
-  <div class="container mt-5">
-    <h1>Carrito</h1>
-  </div>
-  <div class="row">
-    <div class="col-md-8">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Subtotal</th>
-            <th></th>
-          </tr>
-        </thead>
-        {% for producto in productos %}
-          <tbody>
-            <tr>
-              <td>{{ producto.nombre }}</td>
-              <td><input type="number" class="form-control Cantidad" value="{{ producto.cantidad }}"></td>
-              <th class="precio">${{ producto.precio }}</th>
-              <th class="subtotal">${{ producto.subtotal }}</th>
-            </tr>
-          </tbody>
-        {% endfor %}        
-      </table>
+    <div class="container mt-5">
+        <h1>Carrito</h1>
     </div>
-    <div class="col-md-4 ml-auto" style="padding-top: 105px;">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Resumen del carrito</h5>
-          <p class="card-text">Total: <span class="total">${{ total }}</span></p>
-          <form method="post" action="{% url 'procesar_pago' %}">
-            {% csrf_token %}
-            {% for producto in productos %}
-            <input type="hidden" name="productos_eliminar" value="{{ producto.sku }}">
-            {% endfor %}
-            <button type="submit" class="btn btn-dark">Pagar</button>
-          </form>
-        </div>        
-      </div>
-    </div>    
-  </div>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                        <tr>
+                            <td>{{ producto.nombre }}</td>
+                            <td><input type="number" class="form-control Cantidad" value="{{ producto.cantidad }}"></td>
+                            <th class="precio">${{ producto.precio }}</th>
+                            <th class="subtotal">${{ producto.subtotal }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4 ml-auto" style="padding-top: 105px;">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Resumen del carrito</h5>
+                    <p class="card-text">Total: <span class="total">${{ total }}</span></p>
+                    <a href="{% url 'iniciar_pago' %}" class="btn btn-dark">Pagar con Webpay Plus</a> 
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
+
 
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
