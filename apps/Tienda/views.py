@@ -13,7 +13,6 @@ import json
 from django.shortcuts import render, redirect
 from .models import Transaccion
 from .utils import enviar_solicitud_transbank
-from transbank.webpay.webpay_plus.transaction import Transaction
 
 def iniciar_pago(request):
     # Obtener el total del carrito (debes implementar esta lógica)
