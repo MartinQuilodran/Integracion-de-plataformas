@@ -3,6 +3,13 @@ from django.conf import settings
 
 # Create your models here.
 
+class Transaccion(models.Model):
+    orden_compra = models.CharField(max_length=50)
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+    estado = models.CharField(max_length=20, default='pendiente')
+    token = models.CharField(max_length=200, blank=True, null=True)
+
+
 class Categoria(models.Model):
     id_categoria = models.IntegerField(primary_key=True)
     nombre_categoria = models.CharField(max_length=100)
@@ -25,4 +32,9 @@ class Producto(models.Model):
         txt = "N° {0} - Stock: {1} - nombre: {2}"
         return txt.format(self.sku, self.stock, self.nombre)
 
+class Transaccion(models.Model):
+    orden_compra = models.CharField(max_length=50)
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+    estado = models.CharField(max_length=20, default='pendiente')
+    token = models.CharField(max_length=200, blank=True, null=True)
 

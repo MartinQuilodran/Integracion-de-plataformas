@@ -14,7 +14,12 @@ urlpatterns = [
     path('agregar_al_carrito', views.agregarAlCarrito, name='agregar_al_carrito'),
     path('procesar_pago', views.procesarPago, name='procesar_pago'),
     path('api/productos/', views.api_productos, name='api_productos'),
-
-    
+    path('registro/', views.registro, name='registro'),
     path("accounts/", include("django.contrib.auth.urls")),
+    path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
+    path('iniciar_pago/', views.iniciar_pago, name='iniciar_pago'),
 ]
+
+def registro(request):
+    # ... (resto de la vista)
+    return redirect('inicio_sesion')  # Redirige a 'inicio_sesion'
