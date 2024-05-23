@@ -6,53 +6,39 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.contrib.auth import login, logout
-from .forms import RegistrationForm
-import requests
-import json
+from .forms import RegistrationForm 
 
 from django.shortcuts import render, redirect
 from .models import Transaccion
 from .utils import enviar_solicitud_transbank
 
 def iniciar_pago(request):
-    # Obtener el total del carrito (debes implementar esta lógica)
     total = calcular_total_carrito(request)  
-
-    # Crear una orden de compra única (puedes usar un número aleatorio o un UUID)
     orden_compra = generar_orden_compra_unica()  
-
-    # Datos para la transacción de Webpay Plus
     transaction_data = {
         "buy_order": orden_compra,
         "session_id": request.session.session_key,
         "amount": total,
         "return_url": request.build_absolute_uri(reverse('confirmar_pago')) 
     }
-
-    # Enviar la solicitud a la API de Transbank
     response = enviar_solicitud_transbank("https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions", transaction_data)
-
-    # Guardar la transacción en la base de datos
     Transaccion.objects.create(
         orden_compra=orden_compra,
         monto=total,
-        token=response.get('token')  # Obtener el token de la respuesta
+        token=response.get('token')
     )
-
-    # Redirigir al usuario a la URL de pago de Transbank
     return redirect(response.get('url'))
 
 
 def iniciar_pago(request):
-    # ... (obtener información del carrito, productos, etc.)
-    monto = 10000  # Reemplaza con el monto total del carrito
-    orden_compra = "123456789"  # Reemplaza con un número de orden único
+    monto = 10000
+    orden_compra = "123456789"
 
     data = {
         "buy_order": orden_compra,
         "session_id": request.session.session_key,
         "amount": monto,
-        "return_url": "http://127.0.0.1:8000/confirmar_pago/"  # URL de confirmación
+        "return_url": "http://127.0.0.1:8000/confirmar_pago/"  
     }
 
     response = enviar_solicitud_transbank("https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions", data)
@@ -67,17 +53,12 @@ def confirmar_pago(request):
     response = enviar_solicitud_transbank(f"https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions/{token}", {})
 
     if response['status'] == "AUTHORIZED":
-        # Pago exitoso
         orden_compra = response['buy_order']
         transaccion = Transaccion.objects.get(token=token)
         transaccion.estado = "pagado"
         transaccion.save()
-        # ... (procesar el pago, enviar correo de confirmación, etc.)
-
     else:
-        # Pago rechazado o error
-        print(response) # Ver el error por consola.
-        # ... (manejar el error)
+        print(response)
 
     return render(request, 'pago_confirmado.html', {'response': response})
 
