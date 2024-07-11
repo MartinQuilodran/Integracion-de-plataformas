@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block body %}
 <div class="container mt-5">
@@ -7,7 +7,6 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Resultado del Pago</h4>
-
                     {% if response.status == "AUTHORIZED" %}
                         <div class="alert alert-success">
                             <p>¡Pago exitoso!</p>
@@ -22,7 +21,6 @@
                             <p>Descripción: {{ response.description }}</p>
                         </div>
                     {% endif %}
-
                     <a href="/" class="btn btn-primary">Volver a la página principal</a>
                 </div>
             </div>
