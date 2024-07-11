@@ -16,25 +16,30 @@
 
 <div class="container mt-5">
   <div class="row">
-    {% for teclado in cate_teclados %}
-      <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-4">
-        <div class="card h-100">
-          <img src="{{ teclado.imagen_url.url }}" class="card-img-top" alt="{{ teclado.nombre }}">
+    {% for p in cate_teclados %}
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4 mb-4">
+        <div class="card h-100 mb-4">
+          <a href="{% url 'detalle_producto' p.sku %}">
+            <img src="{{ p.imagen_url.url }}" class="card-img-top" alt="{{ p.nombre }}">
+          </a>
           <div class="card-body">
-            <h5 class="card-title"><b>{{ teclado.nombre }}</b></h5>
-            <p class="card-text price">${{ teclado.precio|floatformat:0|intcomma }}</p>
-            {% if not request.user.is_authenticated %}
-              <button class="btn btn-dark liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
-            {% else %}
-              {% if teclado.stock > 0 %}
+            <h5 class="card-title">
+              <a href="{% url 'detalle_producto' p.sku %}"><b>{{ p.nombre }}</b></a>
+            </h5>
+            <p class="card-text price">${{ p.precio}}</p>
+            
+            {% if p.stock > 0 %}
+              {% if not request.user.is_authenticated %}
+                <button class="btn btn-dark liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+              {% else %}
                 <form method="POST" action="{% url 'agregar_al_carrito' %}">
                   {% csrf_token %}
-                  <input type="hidden" name="sku" value="{{ teclado.sku }}">
+                  <input type="hidden" name="sku" value="{{ p.sku }}">
                   <button type="submit" class="btn btn-primary liveToastBtn" data-bs-toggle="toast" data-bs-target="#liveToast">Añadir al carrito</button>
                 </form>
-              {% else %}
-                <p class="card-text">Agotado</p>
               {% endif %}
+            {% else %}
+              <p class="card-text">Agotado</p>
             {% endif %}
           </div>
         </div>
