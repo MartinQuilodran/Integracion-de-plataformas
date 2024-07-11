@@ -1,6 +1,5 @@
 {% extends "./base.html" %}
 {% load static %}
-{% load humanize %}
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" id="style">
@@ -40,10 +39,14 @@
     {% for p in cate_teclados %}
       <div class="col-12 col-sm-12 col-md-4 col-lg-4 mb-4">
         <div class="card h-100 mb-4">
-          <img src="{{ p.imagen_url.url }}" class="card-img-top" alt="{{ p.nombre }}">
+          <a href="{% url 'detalle_producto' p.sku %}">
+            <img src="{{ p.imagen_url.url }}" class="card-img-top" alt="{{ p.nombre }}">
+          </a>
           <div class="card-body">
-            <h5 class="card-title"><b>{{ p.nombre }}</b></h5>
-            <p class="card-text price">${{ p.precio|floatformat:0|intcomma }}</p>
+            <h5 class="card-title">
+              <a href="{% url 'detalle_producto' p.sku %}"><b>{{ p.nombre }}</b></a>
+            </h5>
+            <p class="card-text price">${{ p.precio}}</p>
             
             {% if p.stock > 0 %}
               {% if not request.user.is_authenticated %}
@@ -64,6 +67,7 @@
     {% endfor %}
   </div>
 </div>
+
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
