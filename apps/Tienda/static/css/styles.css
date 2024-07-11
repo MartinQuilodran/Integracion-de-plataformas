@@ -218,4 +218,30 @@ color: #fff;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-  }
+}
+
+
+.product-container {
+    display: flex;
+    flex-direction: row; /* Alinea los elementos en una fila */
+    justify-content: center; /* Centra los elementos horizontalmente */
+    align-items: center; /* Alinea los elementos verticalmente */
+    margin-top: 50px; /* Ajusta según tus necesidades */
+    width: 100%; /* Asegúrate de que ocupe el ancho completo */
+}
+
+.product-image {
+    flex: 1; /* Ocupa una parte proporcional del contenedor */
+    max-width: 50%; /* Máximo ancho para la imagen */
+}
+
+.product-image img {
+    width: 100%; /* Ajusta la imagen para que llene su contenedor */
+    height: auto; /* Mantiene la relación de aspecto */
+}
+
+.product-details {
+    flex: 1; /* Ocupa una parte proporcional del contenedor */
+    padding-left: 20px; /* Espaciado entre la imagen y los detalles */
+    text-align: left; /* Alinea el texto a la izquierda */
+}
