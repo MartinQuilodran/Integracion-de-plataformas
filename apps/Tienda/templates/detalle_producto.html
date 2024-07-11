@@ -1,0 +1,46 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="product-container">
+        <div class="product-image">
+            <img src="{{ producto.imagen_url.url }}" alt="{{ producto.nombre }}">
+        </div>
+        <div class="product-details">
+            <h1>{{ producto.nombre }}</h1>
+            <p class="lead">Precio: ${{ producto.precio}}</p>
+            <p class="font-weight">{{ producto.descripcion }}</p>
+            {% if producto.stock > 0 %}
+              {% if not request.user.is_authenticated %}
+                <button class="btn btn-dark liveToastBtn" type="button" data-bs-toggle="toast" data-bs-target="#liveToast">Agregar al carrito</button>
+              {% else %}
+              <form method="POST" action="{% url 'agregar_al_carrito' %}">
+                {% csrf_token %}
+                <input type="hidden" name="sku" value="{{ producto.sku }}">
+                <button type="submit" class="btn btn-primary">Añadir al carrito</button>
+              </form>              
+              {% endif %}
+            {% else %}
+              <p class="card-text">Agotado</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
+    integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+<script src="{% static 'js/toast.js' %}"></script>
+{% endblock %}
