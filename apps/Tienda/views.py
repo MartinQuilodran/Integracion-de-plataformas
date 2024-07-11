@@ -7,61 +7,73 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.contrib.auth import login, logout
 from .forms import RegistrationForm 
-
-from django.shortcuts import render, redirect
-from .models import Transaccion
 from .utils import enviar_solicitud_transbank
-
-def iniciar_pago(request):
-    total = calcular_total_carrito(request)  
-    orden_compra = generar_orden_compra_unica()  
-    transaction_data = {
-        "buy_order": orden_compra,
-        "session_id": request.session.session_key,
-        "amount": total,
-        "return_url": request.build_absolute_uri(reverse('confirmar_pago')) 
-    }
-    response = enviar_solicitud_transbank("https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions", transaction_data)
-    Transaccion.objects.create(
-        orden_compra=orden_compra,
-        monto=total,
-        token=response.get('token')
-    )
-    return redirect(response.get('url'))
-
+from django.urls import reverse
+from transbank.error.transbank_error import TransbankError
+import uuid
+from django.shortcuts import render, get_object_or_404, redirect
 
 def iniciar_pago(request):
     monto = 10000
-    orden_compra = "123456789"
+    orden_compra = str(uuid.uuid4())  # Utiliza un UUID para garantizar unicidad
 
     data = {
         "buy_order": orden_compra,
-        "session_id": request.session.session_key,
+        "session_id": request.session.session_key or str(uuid.uuid4()),  # Asegúrate de que session_id no sea None
         "amount": monto,
-        "return_url": "http://127.0.0.1:8000/confirmar_pago/"  
+        "return_url": request.build_absolute_uri(reverse('confirmar_pago'))
     }
 
-    response = enviar_solicitud_transbank("https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions", data)
+    try:
+        response = enviar_solicitud_transbank("https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions", data)
+        
+        # Debug: Imprimir respuesta completa
+        print(f"Respuesta de Transbank: {response}")
 
-    Transaccion.objects.create(orden_compra=orden_compra, monto=monto, token=response['token'])
-
-    return redirect(response['url'])
+        if 'token' in response and 'url' in response:
+            Transaccion.objects.create(orden_compra=orden_compra, monto=monto, token=response['token'])
+            return redirect(response['url'])
+        else:
+            error_message = response.get("error", "Error desconocido en la respuesta de Transbank.")
+            messages.error(request, f'Error en la respuesta de Transbank: {error_message}')
+            return redirect('carroCompras')
+    except TransbankError as e:
+        messages.error(request, f'Error de Transbank: {str(e)}')
+        return redirect('carroCompras')
+    except Exception as e:
+        messages.error(request, f'Error inesperado: {str(e)}')
+        return redirect('carroCompras')
 
 def confirmar_pago(request):
     token = request.POST.get('token_ws')
+    if not token:
+        messages.error(request, 'Token no proporcionado.')
+        return redirect('carroCompras')
 
-    response = enviar_solicitud_transbank(f"https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions/{token}", {})
+    try:
+        response = enviar_solicitud_transbank(f"https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions/{token}", {})
+        
+        if response['status'] == "AUTHORIZED":
+            orden_compra = response['buy_order']
+            transaccion = Transaccion.objects.get(token=token)
+            transaccion.estado = "pagado"
+            transaccion.save()
+        else:
+            messages.error(request, f"Error en el pago: {response.get('response_code')} - {response.get('description')}")
+        
+        return render(request, 'pago_confirmado.html', {'response': response})
+    except TransbankError as e:
+        messages.error(request, f'Error de Transbank: {str(e)}')
+        return redirect('carroCompras')
+    except Exception as e:
+        messages.error(request, f'Error inesperado: {str(e)}')
+        response = {"error": str(e)}
+        return render(request, 'pago_confirmado.html', {'response': response})
 
-    if response['status'] == "AUTHORIZED":
-        orden_compra = response['buy_order']
-        transaccion = Transaccion.objects.get(token=token)
-        transaccion.estado = "pagado"
-        transaccion.save()
-    else:
-        print(response)
 
-    return render(request, 'pago_confirmado.html', {'response': response})
-
+def detalle_producto(request, sku):
+    producto = get_object_or_404(Producto, sku=sku)
+    return render(request, 'detalle_producto.html', {'producto': producto})
 
 
 def cerrar_sesion(request):
@@ -200,20 +212,25 @@ def eliminarProducto(request,sku):
 
 # Función para agregar un producto al carrito
 def agregarAlCarrito(request):
-    sku = request.POST.get('sku')
-    # Obtiene el carrito de la sesión
-    carrito = request.session.get('carrito', {})
-    
+    sku = request.POST.get('sku')  # Esto debería capturar el SKU correctamente
+
+    if not sku:
+        # Si no hay SKU, puedes decidir qué hacer, quizás redirigir o mostrar un error
+        return HttpResponse('SKU requerido.', status=400)
+
     try:
         producto = Producto.objects.get(sku=sku)
         if producto.stock > 0:
             # Añade el producto al carrito
+            carrito = request.session.get('carrito', {})
             carrito[sku] = carrito.get(sku, 0) + 1
-            producto.save()
+            request.session['carrito'] = carrito
+            return redirect('carroCompras')
+        else:
+            return HttpResponse('Producto agotado.', status=400)
     except Producto.DoesNotExist:
-        pass
-    request.session['carrito'] = carrito
-    return redirect('carroCompras')
+        return HttpResponse('Producto no encontrado.', status=404)
+
 
 # Función para verificar el stock de un producto
 def verificar_stock(request):
